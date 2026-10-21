@@ -1,0 +1,93 @@
+{
+  "name": "claude-quota",
+  "displayName": "Claude Quota",
+  "description": "See your Claude plan usage limits at a glance: session, weekly, and where your usage went.",
+  "version": "0.1.0",
+  "publisher": "daniele-sforza",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daniele-sforza/claude-quota.git"
+  },
+  "license": "UNLICENSED",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "claude",
+    "anthropic",
+    "quota",
+    "usage",
+    "limits"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "claudeQuota",
+          "title": "Claude Quota",
+          "icon": "media/activity-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "claudeQuota": [
+        {
+          "type": "webview",
+          "id": "claudeQuota.view",
+          "name": "Usage"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "claudeQuota.refresh",
+        "title": "Refresh",
+        "category": "Claude Quota",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "claudeQuota.openUsagePage",
+        "title": "Open Usage on claude.ai",
+        "category": "Claude Quota",
+        "icon": "$(link-external)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "claudeQuota.refresh",
+          "when": "view == claudeQuota.view",
+          "group": "navigation@1"
+        },
+        {
+          "command": "claudeQuota.openUsagePage",
+          "when": "view == claudeQuota.view",
+          "group": "navigation@2"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Claude Quota",
+      "properties": {
+        "claudeQuota.refreshIntervalMinutes": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "description": "How often to refresh your usage, in minutes."
+        },
+        "claudeQuota.showInStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show session and weekly usage in the status bar."
+        }
+      }
+    }
+  }
+}

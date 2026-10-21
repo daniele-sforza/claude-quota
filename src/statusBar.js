@@ -10,9 +10,10 @@ const LEVEL_COLORS = [
 
 class QuotaStatusBar {
   constructor() {
-    // VS Code colors a whole item at once, so each value gets its own item.
-    this.session = createItem('claudeQuota.session', 'Claude Quota: Session', 101);
-    this.weekly = createItem('claudeQuota.weekly', 'Claude Quota: Weekly', 100);
+    // VS Code colors a whole item at once, so each value gets its own item. Items are ordered by
+    // priority across all extensions; adjacent fractional values keep anything from landing between.
+    this.session = createItem('claudeQuota.session', 'Claude Quota: Session', 100.00002);
+    this.weekly = createItem('claudeQuota.weekly', 'Claude Quota: Weekly', 100.00001);
   }
 
   update(state) {

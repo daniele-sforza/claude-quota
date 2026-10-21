@@ -19,7 +19,7 @@ The extension reads the sign-in that Claude Code already stores on your machine 
 | `claudeQuota.refreshIntervalMinutes` | `5` | How often to refresh. |
 | `claudeQuota.showInStatusBar` | `true` | Show the status bar item. |
 
-It also refreshes when the window regains focus or the panel opens, if the data is more than a minute old.
+All open VS Code windows share one cached result, so together they make about one request per interval. The refresh button fetches again at most once a minute. If Claude rate-limits the check, the extension keeps showing the last numbers and waits 2, 5, 10, then 15 minutes before retrying.
 
 ## License
 

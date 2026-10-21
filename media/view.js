@@ -10,7 +10,7 @@
     'no-credentials': ['Not signed in', 'Sign in to Claude Code (run claude, then /login) and your usage will show up here.'],
     expired: ['Sign-in expired', 'Claude Code refreshes your sign-in whenever you use it. Run it once, then try again.'],
     network: ["Can't reach Claude", 'Check your connection and try again.'],
-    'rate-limited': ['Too many requests', 'Give it a minute, then try again.'],
+    'rate-limited': ['Too many requests', null],
   };
 
   const SPARK = `<svg viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="spark" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--clay-hi)"/><stop offset="1" style="stop-color:var(--clay)"/></linearGradient></defs><path fill="url(#spark)" d="M12 1.5C12.9 7.3 16.7 11.1 22.5 12 16.7 12.9 12.9 16.7 12 22.5 11.1 16.7 7.3 12.9 1.5 12 7.3 11.1 11.1 7.3 12 1.5Z"/></svg>`;
@@ -159,7 +159,7 @@
       <div class="empty">
         ${SPARK}
         <h1>${esc(title)}</h1>
-        <p>${esc(body)}</p>
+        <p>${esc(body ?? error.message)}</p>
         <button class="btn" data-action="refresh">Try again</button>
       </div>`;
   }

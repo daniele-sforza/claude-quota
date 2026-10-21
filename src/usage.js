@@ -69,7 +69,11 @@ async function fetchUsage() {
   if (res.status === 401 || res.status === 403) {
     throw new QuotaError('expired', 'Your Claude Code sign-in has expired.');
   }
-  if (res.status === 429) throw new QuotaError('rate-limited', 'Too many requests. Try again in a minute.');
+  if (res.status === 429) {
+    const err = new QuotaError('rate-limited', 'Too many requests.');
+    err.retryAfterMs = Number(res.headers.get('retry-after')) * 1000 || 0;
+    throw err;
+  }
   if (!res.ok) throw new QuotaError('http', `Claude returned HTTP ${res.status}.`);
 
   return normalize(await res.json(), oauth);

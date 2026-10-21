@@ -62,14 +62,9 @@
     "menus": {
       "view/title": [
         {
-          "command": "claudeQuota.refresh",
-          "when": "view == claudeQuota.view",
-          "group": "navigation@1"
-        },
-        {
           "command": "claudeQuota.openUsagePage",
           "when": "view == claudeQuota.view",
-          "group": "navigation@2"
+          "group": "navigation"
         }
       ]
     },

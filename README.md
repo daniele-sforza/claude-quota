@@ -2,6 +2,8 @@
 
 See your Claude plan usage limits without leaving VS Code.
 
+> **Unofficial.** This is an independent project. It is not affiliated with, endorsed by, or sponsored by Anthropic.
+
 - **Sidebar dashboard**: rings for your session and weekly limits, a card per limit with its reset countdown, a pace marker showing how much of the window has passed, and a projection of whether you'll hit the limit before it resets.
 - **Breakdown** of where this week's usage went (Claude Code, chats, and so on).
 - **Status bar** item (`5h 12% · 7d 40%`) that turns amber at 75% and red at 90%. Click it to open the dashboard.
@@ -22,3 +24,5 @@ It also refreshes when the window regains focus or the panel opens, if the data 
 ## License
 
 [MIT](LICENSE)
+
+Claude and Anthropic are trademarks of Anthropic, PBC. They are used here only to describe what the extension works with.

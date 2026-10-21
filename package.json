@@ -1,7 +1,7 @@
 {
   "name": "claude-quota",
   "displayName": "Claude Quota",
-  "description": "See your Claude plan usage limits at a glance: session, weekly, and where your usage went.",
+  "description": "Unofficial, not affiliated with Anthropic. See your Claude plan usage limits at a glance: session, weekly, and where your usage went.",
   "version": "0.1.0",
   "publisher": "daniele-sforza",
   "repository": {

@@ -1,54 +1,90 @@
 const vscode = require('vscode');
 
+// Theme chart colors, so the values stay readable in light and dark themes.
+const LEVEL_COLORS = [
+  [90, 'charts.red'],
+  [75, 'charts.orange'],
+  [50, 'charts.yellow'],
+  [0, 'charts.green'],
+];
+
 class QuotaStatusBar {
   constructor() {
-    this.item = vscode.window.createStatusBarItem('claudeQuota.status', vscode.StatusBarAlignment.Right, 100);
-    this.item.name = 'Claude Quota';
-    this.item.command = 'claudeQuota.view.focus';
+    // VS Code colors a whole item at once, so each value gets its own item.
+    this.session = createItem('claudeQuota.session', 'Claude Quota: Session', 101);
+    this.weekly = createItem('claudeQuota.weekly', 'Claude Quota: Weekly', 100);
   }
 
   update(state) {
     if (!vscode.workspace.getConfiguration('claudeQuota').get('showInStatusBar', true)) {
-      this.item.hide();
+      this.session.hide();
+      this.weekly.hide();
       return;
     }
 
     const { data, error } = state;
-    this.item.backgroundColor = undefined;
-
     if (!data) {
-      this.item.text = error ? '$(sparkle) Claude —' : '$(sync~spin) Claude';
-      this.item.tooltip = error ? `Claude Quota: ${error.message}` : 'Loading Claude usage…';
-      this.item.show();
+      this.weekly.hide();
+      this.session.text = error ? '$(sparkle) Claude —' : '$(sync~spin) Claude';
+      this.session.color = undefined;
+      this.session.tooltip = error ? `Claude Quota: ${error.message}` : 'Loading Claude usage…';
+      this.session.show();
       return;
     }
 
+    const tooltip = buildTooltip(data, error);
     const session = data.limits.find((l) => l.group === 'session');
     const weekly = data.limits
       .filter((l) => l.group === 'weekly')
       .sort((a, b) => b.percent - a.percent)[0];
-    const parts = [session && `5h ${Math.round(session.percent)}%`, weekly && `7d ${Math.round(weekly.percent)}%`];
-    this.item.text = `$(sparkle) ${parts.filter(Boolean).join(' · ') || 'Claude'}`;
 
-    const peak = Math.max(0, ...data.limits.map((l) => l.percent));
-    if (peak >= 90) this.item.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
-    else if (peak >= 75) this.item.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
-
-    const tooltip = new vscode.MarkdownString();
-    tooltip.appendMarkdown(`**Claude${data.plan ? ` ${data.plan}` : ''}** usage\n\n`);
-    tooltip.appendMarkdown('| | Used | Resets |\n|:--|--:|:--|\n');
-    for (const l of data.limits) {
-      tooltip.appendMarkdown(`| ${l.label} | ${Math.round(l.percent)}% | ${formatReset(l.resetsAt)} |\n`);
+    let first = true;
+    for (const [item, limit, prefix] of [
+      [this.session, session, '5h'],
+      [this.weekly, weekly, '7d'],
+    ]) {
+      if (!limit) {
+        item.hide();
+        continue;
+      }
+      item.text = `${first ? '$(sparkle) ' : ''}${prefix} ${Math.round(limit.percent)}%`;
+      item.color = new vscode.ThemeColor(LEVEL_COLORS.find(([min]) => limit.percent >= min)[1]);
+      item.tooltip = tooltip;
+      item.show();
+      first = false;
     }
-    if (error) tooltip.appendMarkdown(`\n$(warning) Last refresh failed: ${error.message}`);
-    tooltip.supportThemeIcons = true;
-    this.item.tooltip = tooltip;
-    this.item.show();
+
+    if (first) {
+      this.session.text = '$(sparkle) Claude';
+      this.session.color = undefined;
+      this.session.tooltip = tooltip;
+      this.session.show();
+    }
   }
 
   dispose() {
-    this.item.dispose();
+    this.session.dispose();
+    this.weekly.dispose();
   }
+}
+
+function createItem(id, name, priority) {
+  const item = vscode.window.createStatusBarItem(id, vscode.StatusBarAlignment.Right, priority);
+  item.name = name;
+  item.command = 'claudeQuota.view.focus';
+  return item;
+}
+
+function buildTooltip(data, error) {
+  const tooltip = new vscode.MarkdownString();
+  tooltip.supportThemeIcons = true;
+  tooltip.appendMarkdown(`**Claude${data.plan ? ` ${data.plan}` : ''}** usage\n\n`);
+  tooltip.appendMarkdown('| | Used | Resets |\n|:--|--:|:--|\n');
+  for (const l of data.limits) {
+    tooltip.appendMarkdown(`| ${l.label} | ${Math.round(l.percent)}% | ${formatReset(l.resetsAt)} |\n`);
+  }
+  if (error) tooltip.appendMarkdown(`\n$(warning) Last refresh failed: ${error.message}`);
+  return tooltip;
 }
 
 function formatReset(iso) {

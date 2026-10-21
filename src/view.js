@@ -24,6 +24,10 @@ class QuotaViewProvider {
     webviewView.onDidDispose(() => (this.view = undefined));
   }
 
+  get visible() {
+    return Boolean(this.view?.visible);
+  }
+
   update(state) {
     this.state = state;
     this.post();

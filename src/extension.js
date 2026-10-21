@@ -49,6 +49,9 @@ function activate(context) {
     statusBar,
     vscode.window.registerWebviewViewProvider('claudeQuota.view', view),
     vscode.commands.registerCommand('claudeQuota.refresh', refresh),
+    vscode.commands.registerCommand('claudeQuota.toggle', () =>
+      vscode.commands.executeCommand(view.visible ? 'workbench.action.closeSidebar' : 'claudeQuota.view.focus'),
+    ),
     vscode.commands.registerCommand('claudeQuota.openUsagePage', () =>
       vscode.env.openExternal(vscode.Uri.parse(USAGE_PAGE)),
     ),

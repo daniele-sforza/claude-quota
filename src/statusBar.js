@@ -72,7 +72,7 @@ class QuotaStatusBar {
 function createItem(id, name, priority) {
   const item = vscode.window.createStatusBarItem(id, vscode.StatusBarAlignment.Right, priority);
   item.name = name;
-  item.command = 'claudeQuota.view.focus';
+  item.command = 'claudeQuota.toggle';
   return item;
 }
 

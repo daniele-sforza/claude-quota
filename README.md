@@ -6,7 +6,7 @@ See your Claude plan usage limits without leaving VS Code.
 
 - **Sidebar dashboard**: rings for your session and weekly limits, a card per limit with its reset countdown, a pace marker showing how much of the window has passed, and a projection of whether you'll hit the limit before it resets.
 - **Breakdown** of where this week's usage went (Claude Code, chats, and so on).
-- **Status bar** item (`5h 12% · 7d 40%`) that turns amber at 75% and red at 90%. Click it to open the dashboard.
+- **Status bar** values for your session and weekly limits (`5h 12%` `7d 40%`), each colored by how much is used: green under 50%, yellow from 50%, orange from 75%, red from 90%. Click either one to open or close the dashboard.
 
 ## How it works
 

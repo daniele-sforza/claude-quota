@@ -18,3 +18,7 @@ The extension reads the sign-in that Claude Code already stores on your machine 
 | `claudeQuota.showInStatusBar` | `true` | Show the status bar item. |
 
 It also refreshes when the window regains focus or the panel opens, if the data is more than a minute old.
+
+## License
+
+[MIT](LICENSE)

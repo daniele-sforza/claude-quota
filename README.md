@@ -27,6 +27,21 @@ The extension reads the sign-in that Claude Code already stores on your machine 
 
 All open VS Code windows share one cached result, so together they make about one request per interval. The refresh button fetches again at most once a minute. If Claude rate-limits the check, the extension keeps showing the last numbers and waits 2, 5, 10, then 15 minutes before retrying.
 
+## Colors
+
+The status bar colors follow your theme. While you're debugging or have no folder open, VS Code gives the status bar a different background, and in high-contrast themes the colors would hurt readability. In those cases the values use the status bar's own text color, and usage from 75% or 90% gets VS Code's warning or error highlight instead.
+
+If your theme uses a colored status bar and the values are hard to read, override the colors in your settings:
+
+```json
+"workbench.colorCustomizations": {
+  "claudeQuota.statusBar.low": "#b5f5c8",
+  "claudeQuota.statusBar.medium": "#ffe9a0",
+  "claudeQuota.statusBar.high": "#ffc28a",
+  "claudeQuota.statusBar.critical": "#ffb0a8"
+}
+```
+
 ## License
 
 [MIT](LICENSE)

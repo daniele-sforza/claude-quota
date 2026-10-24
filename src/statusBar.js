@@ -1,11 +1,11 @@
 const vscode = require('vscode');
 
-// Theme chart colors, so the values stay readable in light and dark themes.
+// Contributed in package.json (defaulting to the theme's chart colors), so users can override them.
 const LEVEL_COLORS = [
-  [90, 'charts.red'],
-  [75, 'charts.orange'],
-  [50, 'charts.yellow'],
-  [0, 'charts.green'],
+  [90, 'claudeQuota.statusBar.critical'],
+  [75, 'claudeQuota.statusBar.high'],
+  [50, 'claudeQuota.statusBar.medium'],
+  [0, 'claudeQuota.statusBar.low'],
 ];
 
 class QuotaStatusBar {
@@ -28,6 +28,7 @@ class QuotaStatusBar {
       this.weekly.hide();
       this.session.text = error ? '$(sparkle) Claude —' : '$(sync~spin) Claude';
       this.session.color = undefined;
+      this.session.backgroundColor = undefined;
       this.session.tooltip = error ? `Claude Quota: ${error.message}` : 'Loading Claude usage…';
       this.session.show();
       return;
@@ -39,6 +40,7 @@ class QuotaStatusBar {
       .filter((l) => l.group === 'weekly')
       .sort((a, b) => b.percent - a.percent)[0];
 
+    const plain = usePlainColors();
     let first = true;
     for (const [item, limit, prefix] of [
       [this.session, session, '5h'],
@@ -49,7 +51,8 @@ class QuotaStatusBar {
         continue;
       }
       item.text = `${first ? '$(sparkle) ' : ''}${prefix} ${Math.round(limit.percent)}%`;
-      item.color = new vscode.ThemeColor(LEVEL_COLORS.find(([min]) => limit.percent >= min)[1]);
+      item.color = plain ? undefined : new vscode.ThemeColor(LEVEL_COLORS.find(([min]) => limit.percent >= min)[1]);
+      item.backgroundColor = plain ? alertBackground(limit.percent) : undefined;
       item.tooltip = tooltip;
       item.show();
       first = false;
@@ -58,6 +61,7 @@ class QuotaStatusBar {
     if (first) {
       this.session.text = '$(sparkle) Claude';
       this.session.color = undefined;
+      this.session.backgroundColor = undefined;
       this.session.tooltip = tooltip;
       this.session.show();
     }
@@ -67,6 +71,26 @@ class QuotaStatusBar {
     this.session.dispose();
     this.weekly.dispose();
   }
+}
+
+// The bar takes another background while debugging or with no folder open, and the level colors
+// can disappear against it (red on a red debug bar). There, and in high-contrast themes, keep the
+// bar's own foreground and flag high usage with the warning/error item backgrounds instead, which
+// every theme pairs with a readable foreground.
+function usePlainColors() {
+  const { kind } = vscode.window.activeColorTheme;
+  return (
+    Boolean(vscode.debug.activeDebugSession) ||
+    !vscode.workspace.workspaceFolders?.length ||
+    kind === vscode.ColorThemeKind.HighContrast ||
+    kind === vscode.ColorThemeKind.HighContrastLight
+  );
+}
+
+function alertBackground(percent) {
+  if (percent >= 90) return new vscode.ThemeColor('statusBarItem.errorBackground');
+  if (percent >= 75) return new vscode.ThemeColor('statusBarItem.warningBackground');
+  return undefined;
 }
 
 function createItem(id, name, priority) {

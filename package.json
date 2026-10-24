@@ -84,6 +84,28 @@
           "description": "Show session and weekly usage in the status bar."
         }
       }
-    }
+    },
+    "colors": [
+      {
+        "id": "claudeQuota.statusBar.low",
+        "description": "Status bar usage value under 50%.",
+        "defaults": { "dark": "charts.green", "light": "charts.green", "highContrast": "statusBar.foreground", "highContrastLight": "statusBar.foreground" }
+      },
+      {
+        "id": "claudeQuota.statusBar.medium",
+        "description": "Status bar usage value from 50%.",
+        "defaults": { "dark": "charts.yellow", "light": "charts.yellow", "highContrast": "statusBar.foreground", "highContrastLight": "statusBar.foreground" }
+      },
+      {
+        "id": "claudeQuota.statusBar.high",
+        "description": "Status bar usage value from 75%.",
+        "defaults": { "dark": "charts.orange", "light": "charts.orange", "highContrast": "statusBar.foreground", "highContrastLight": "statusBar.foreground" }
+      },
+      {
+        "id": "claudeQuota.statusBar.critical",
+        "description": "Status bar usage value from 90%.",
+        "defaults": { "dark": "charts.red", "light": "charts.red", "highContrast": "statusBar.foreground", "highContrastLight": "statusBar.foreground" }
+      }
+    ]
   }
 }

@@ -86,6 +86,10 @@ function activate(context) {
       vscode.env.openExternal(vscode.Uri.parse(USAGE_PAGE)),
     ),
     vscode.window.onDidChangeWindowState((s) => s.focused && refresh(false)),
+    // These change the status bar's background, so the value colors need re-picking.
+    vscode.debug.onDidChangeActiveDebugSession(() => statusBar.update(state)),
+    vscode.workspace.onDidChangeWorkspaceFolders(() => statusBar.update(state)),
+    vscode.window.onDidChangeActiveColorTheme(() => statusBar.update(state)),
     vscode.workspace.onDidChangeConfiguration((e) => {
       if (e.affectsConfiguration('claudeQuota.refreshIntervalMinutes')) schedule();
       if (e.affectsConfiguration('claudeQuota.showInStatusBar')) statusBar.update(state);

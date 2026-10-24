@@ -73,15 +73,14 @@ class QuotaStatusBar {
   }
 }
 
-// The bar takes another background while debugging or with no folder open, and the level colors
-// can disappear against it (red on a red debug bar). There, and in high-contrast themes, keep the
-// bar's own foreground and flag high usage with the warning/error item backgrounds instead, which
-// every theme pairs with a readable foreground.
+// The bar takes another background while debugging, and the level colors can disappear against it
+// (red on a red debug bar). There, and in high-contrast themes, keep the bar's own foreground and
+// flag high usage with the warning/error item backgrounds instead, which every theme pairs with a
+// readable foreground.
 function usePlainColors() {
   const { kind } = vscode.window.activeColorTheme;
   return (
     Boolean(vscode.debug.activeDebugSession) ||
-    !vscode.workspace.workspaceFolders?.length ||
     kind === vscode.ColorThemeKind.HighContrast ||
     kind === vscode.ColorThemeKind.HighContrastLight
   );

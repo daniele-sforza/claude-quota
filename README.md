@@ -29,7 +29,7 @@ All open VS Code windows share one cached result, so together they make about on
 
 ## Colors
 
-The status bar colors follow your theme. While you're debugging or have no folder open, VS Code gives the status bar a different background, and in high-contrast themes the colors would hurt readability. In those cases the values use the status bar's own text color, and usage from 75% or 90% gets VS Code's warning or error highlight instead.
+The status bar colors follow your theme. While you're debugging, VS Code gives the status bar a different background, and in high-contrast themes the colors would hurt readability. In those cases the values use the status bar's own text color, and usage from 75% or 90% gets VS Code's warning or error highlight instead.
 
 If your theme uses a colored status bar and the values are hard to read, override the colors in your settings:
 
